@@ -1,0 +1,61 @@
+-- First, require Rayfield
+local Rayfield = loadstring(game:HttpGet('https://raw.githubusercontent.com/Rayfield-UI/Library/main/source.lua'))()
+
+-- Create a new window with Rayfield
+local window = Rayfield:CreateWindow({
+    Name = "WalkSpeed Changer",
+    LoadingTitle = "Loading UI...",
+    LoadingSubtitle = "Please wait",
+    ConfigurationSaving = {
+        Enabled = true,
+        FolderName = nil,
+        FileName = "walkspeed_config"
+    },
+    Discord = {
+        Enabled = false,
+        Invite = "", -- Discord invite link
+        Version = "1.0"
+    },
+    KeySystem = false, -- Set to true if you want to add a key system
+})
+
+-- Create a tab for the WalkSpeed controls
+local tab = window:CreateTab("WalkSpeed", 4483362458)
+
+-- Create a slider for changing WalkSpeed
+tab:CreateSlider({
+    Name = "WalkSpeed",
+    Range = {16, 100}, -- Min: 16, Max: 100
+    Increment = 1, -- Step size
+    Suffix = " WalkSpeed", -- Label that will be shown with the value
+    CurrentValue = 16, -- Starting value
+    Flag = "walkSpeedSlider", -- Unique identifier for this slider
+    Callback = function(value)
+        local player = game.Players.LocalPlayer
+        local character = player.Character or player.CharacterAdded:Wait()
+        local humanoid = character:WaitForChild("Humanoid")
+        
+        -- Set the WalkSpeed to the selected value
+        humanoid.WalkSpeed = value
+    end,
+})
+
+-- Optional: Add a button to reset the walk speed to default
+tab:CreateButton({
+    Name = "Reset WalkSpeed",
+    Callback = function()
+        local player = game.Players.LocalPlayer
+        local character = player.Character or player.CharacterAdded:Wait()
+        local humanoid = character:WaitForChild("Humanoid")
+        
+        -- Reset the WalkSpeed to the default (16)
+        humanoid.WalkSpeed = 16
+    end,
+})
+
+-- Finally, show the window
+Rayfield:Notify({
+    Title = "WalkSpeed Script Loaded",
+    Content = "You can now change your walk speed using the slider.",
+    Duration = 5,
+})
